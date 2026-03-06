@@ -7,11 +7,19 @@ const loadLessons = () =>{
     })
 }
 
+const removeActive = () => {
+    const lessonButtons = document.querySelectorAll(".lesson-btn");
+    lessonButtons.forEach((btn) => btn.classList.remove("active"));
+}
+
 const loadLevelWord = (id) => {
     const url = `https://openapi.programming-hero.com/api/level/${id}`;
     fetch(url)
     .then(response => response.json())
     .then(data => {
+        removeActive();
+        const clickBtn = document.getElementById(`lesson-btn-${id}`)
+        clickBtn.classList.add("active")
         displayLevelWord(data.data);
     })
 }
@@ -40,7 +48,7 @@ const displayLevelWord = (words) =>{
             <p class="font-medium">Meaning /Pronounciation</p>
             <div class="font-bangla text-2xl font-medium text-[#18181B]">" ${word.meaning ? word.meaning : "অর্থ পাওয়া যায়নি"} / ${word.pronunciation ? word.pronunciation : "উচ্চারণ পাওয়া যায়নি"}"</div>
             <div class="flex justify-between items-center">
-                <button class="btn bg-[#1A91FF10] hover:bg-[#1A91FF]"><i class="fa-solid fa-circle-info"></i></button>
+                <button onclick= "my_modal_5.showModal()" class="btn bg-[#1A91FF10] hover:bg-[#1A91FF]"><i class="fa-solid fa-circle-info"></i></button>
                 <button class="btn bg-[#1A91FF10] hover:bg-[#1A91FF]"><i class="fa-solid fa-volume-high"></i></button>
             </div>
         </div>
@@ -58,7 +66,7 @@ const displayLessons = (lessons) =>{
         console.log(lesson);
         const btnDiv = document.createElement('div');
         btnDiv.innerHTML = `
-        <button onclick="loadLevelWord(${lesson.level_no})" class="btn btn-outline btn-primary"><i class="fa-solid fa-book-open"></i>Lesson - ${lesson.level_no}</button> 
+        <button id="lesson-btn-${lesson.level_no}" onclick="loadLevelWord(${lesson.level_no})" class="btn btn-outline btn-primary lesson-btn"><i class="fa-solid fa-book-open"></i>Lesson - ${lesson.level_no}</button> 
         `
         // append into container
         levelContainer.append(btnDiv);
